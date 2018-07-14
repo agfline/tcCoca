@@ -51,7 +51,7 @@ Example :
 
 ### First, set a new timecode
 
-```
+```c
 struct timecode tc;
 
 tc_set_by_hmsf( &tc, 23, 59, 59, 29, TC_29_97_DF );
@@ -64,7 +64,7 @@ tc_set_by_frames( &tc, 2589407, TC_29_97_DF );
 
 Sometimes you want to retrieve timecode from some value other than a frame rate. One example is the *sample since midnight* from BWF/WAVE that holds a timecode value with sample accuracy. To do so, you can use `tc_set_by_unitValue()` by passing a value and its edit rate as a rational number :
 
-```
+```c
 uint64_t value = 4147194251;
 rational_t edit_rate = {48000, 1}; // value has 48000 units per second
 
@@ -77,7 +77,7 @@ This function can be useful in the situations where you don't know if the value 
 
 If you must use an unpredictable timecode format, you can call `tc_fps2format()` which returns the corresponding TC_FORMAT constant to be used with LibTC.
 
-```
+```c
 float fps  = 29.97;
 int isDrop = 1;
 
@@ -97,7 +97,7 @@ else
 
 Setting a timecode using one of the above functions fills the entire `timecode` structure. The structure stores the TC in various forms :
 
-```
+```c
 printf("%s\n", tc.string );
 // prints 23:59:59;29
 
@@ -119,7 +119,7 @@ Converting a timecode means changing its format to another. There are two conver
 
 The first one keeps the same frame rate and changes the timecode's HMFS.
 
-```
+```c
 struct timecode tc;
 
 
@@ -141,7 +141,7 @@ The second method allows for a given timecode to change only the frame number so
 
 TODO Test with :29   to   :59    ????
 
-```
+```c
 struct timecode tc;
 
 
@@ -164,7 +164,7 @@ tc_convert_frames( &tc, TC_29_97_NDF );
 It is possible to add or subtract to timecodes. For that, both timecode operands must share the same format.
 The result of the operation is stored in the first timecode operand.
 
-```
+```c
 struct timecode tc_a;
 struct timecode tc_b;
 
@@ -179,3 +179,8 @@ tc_sub( &tc_a, &tc_b );
 
 // tc_a : 00:00:01:10
 ```
+
+---
+
+Copyright © 2018 Adrien Gesta-Fline<br />
+tcCoca and LibTC are released under the __GNU AGPLv3__ : http://www.gnu.org/licenses/agpl-3.0.txt
