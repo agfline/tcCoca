@@ -46,10 +46,13 @@ void show_help()
         value associated with an edit rate.\n\
     \n\
     Options :\n\
+            --help                  show this help\n\
         -l, --list                  list all supported TC formats\n\
+		\n\
         -F, --format      <format>  set the TC value format to <format>\n\
         -R, --rate        <rate>    specify the edit rate of the input TC\n\
                                     value - default is frame rate\n\
+		\n\
         -c, --convert-to  <format>  convert TC value to the given <format>\n\
         -a, --add         <value>   add <value> to input TC value\n\
         -s, --sub         <value>   subtract <value> from input TC value\n\
@@ -73,10 +76,14 @@ void show_help()
 
 void show_formats()
 {
+	printf( "\n Supported timecode format options :\n\n" );
+
     for ( size_t i = 1; TC_FORMAT_STR[i][0] != '\0'; i++ )
     {
-        printf( "  %s\n", TC_FORMAT_STR[i] );
+        printf( "   %s\n", TC_FORMAT_STR[i] );
     }
+
+	printf( "\n" );
 }
 
 
@@ -272,13 +279,13 @@ int main( int argc, char *argv[] )
 
     if ( c_tc_format == NULL )
     {
-        fprintf( stderr, "Missing -F format.\n" );
+        fprintf( stderr, "Missing timecode --format.\n" );
         return 1;
     }
 
     if ( optind == argc )
     {
-        fprintf( stderr, "Missing input timecode value.\n" );
+        fprintf( stderr, "Missing timecode value.\n" );
         return 1;
     }
 
@@ -288,7 +295,7 @@ int main( int argc, char *argv[] )
 
     if ( tc_format == TC_FORMAT_UNK )
     {
-        fprintf( stderr, "Unknown or unsupported timecode format \"%s\".\n", c_tc_format );
+        fprintf( stderr, "Unsupported timecode format \"%s\"\nSee tcCoca -l for a list of the supported formats.\n", c_tc_format );
         return 1;
     }
 
