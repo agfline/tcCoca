@@ -25,14 +25,19 @@ Usage :
     tc value can be either hh:mm:ss:ff timecode, frame number or any
     value associated with an edit rate.
 
+
 Options :
+        --help                  show this help
     -l, --list                  list all supported TC formats
+
     -F, --format      <format>  set the TC value format to <format>
     -R, --rate        <rate>    specify the edit rate of the input TC
                                 value - default is frame rate
+
     -c, --convert-to  <format>  convert TC value to the given <format>
     -a, --add         <value>   add <value> to input TC value
     -s, --sub         <value>   subtract <value> from input TC value
+
 
 Output :
     -h, --hmsf                  output TC as a time value hh:mm:ss:ff only
@@ -40,7 +45,7 @@ Output :
     -n, --no-rollover           don't rollover if TC is bigger than day limit
 
 
-Example :
+Examples :
     tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:7
     tcCoca -F 29.97DF 4147194251 -R 48000/1
     tcCoca -F 29.97DF 2589407
