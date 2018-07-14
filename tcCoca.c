@@ -367,7 +367,7 @@ int main( int argc, char *argv[] )
     {
 		printf( "format   : %s\n", TC_FORMAT_STR[tc->format] );
         printf( "timecode : %s\n", tc->string );
-        printf( "frames   : %u\n", tc->frameNumber );
+        printf( "frames   : %i\n", tc->frameNumber );
     }
 
 

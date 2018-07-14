@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h> // abs()
 #include <math.h>	// round()
 
 #include "libTC.h"
@@ -41,15 +42,14 @@ static char *TC_FORMAT_STR[] = {
 	"TC_25",
 	"TC_29_97_NDF",
 	"TC_29_97_DF",
-	"TC_30_NDF",
-	"TC_30_DF",
+	"TC_30",
 	"TC_47_95",
 	"TC_48",
 	"TC_50",
 	"TC_59_94_NDF",
 	"TC_59_94_DF",
 	"TC_60",
-	"TC_60_DF",
+	"TC_72",
 	"TC_96",
 	"TC_100",
 	"TC_120"
@@ -74,13 +74,23 @@ static void unitValueToFrames( struct timecode *tc )
 
 static void hmsfToString( struct timecode *tc )
 {
+	char string[16];
 
-	snprintf( tc->string,  16, "%02u%c%02u%c%02u%c%02u",
+	snprintf( string,  16, "%02i%c%02u%c%02u%c%02u",
 	          tc->hours,   TC_SEP,
 	          tc->minutes, TC_SEP,
 	          tc->seconds, (tc->format == TC_29_97_DF || tc->format == TC_59_94_DF) ? TC_SEP_DROP : TC_SEP,
 	          tc->frames   );
 
+	if ( tc->frameNumber < 0 )
+	{
+		tc->string[0] = '-';
+		strcpy( tc->string+1, string );
+	}
+	else
+	{
+		strcpy( tc->string, string );
+	}
 }
 
 
@@ -103,24 +113,24 @@ static void StringToHmsf( struct timecode *tc )
 static void hmsfToFrames( struct timecode *tc )
 {
 
-	float fps = rationalToFloat( TC_FPS[tc->format] );
+	float fps = round(rationalToFloat( TC_FPS[tc->format] ));
 
 	uint32_t dropFrames = 0;
 
 	if ( tc->format == TC_29_97_DF ||
 		 tc->format == TC_59_94_DF )
 	{
-		dropFrames =   (tc->hours   * (2 * 9 * 6))     + \
-		              ((tc->minutes / 10)  * (2 * 9))  + \
+		dropFrames =   (tc->hours   * (2 * 9 * 6))    + \
+		              ((tc->minutes / 10)  * (2 * 9)) + \
 					 (((tc->minutes % 10)) *  2);
 					  // - ((tc->minutes % 10)  ?  2 : 0 ); // we don't take out the first two frame numbers (00 and 01) of the current 10min block because we start the counting at 0..
 	}
 
 
-	tc->frameNumber = ( tc->hours * 3600 * round(fps) ) + \
-					  ( tc->minutes * 60 * round(fps) ) + \
-					  ( tc->seconds * round(fps) )      + \
-					  ( tc->frames )                    - \
+	tc->frameNumber = ( tc->hours * 3600 * fps ) + \
+					  ( tc->minutes * 60 * fps ) + \
+					  ( tc->seconds * fps )      + \
+					  ( tc->frames )             - \
 					    dropFrames;
 
 }
@@ -131,9 +141,9 @@ static void hmsfToFrames( struct timecode *tc )
 static void framesToHmsf( struct timecode *tc )
 {
 
-	uint32_t frameNumber = tc->frameNumber;
+	int32_t frameNumber = abs(tc->frameNumber);
 
-	float fps = rationalToFloat( TC_FPS[tc->format] );
+	float fps = round(rationalToFloat( TC_FPS[tc->format] ));
 
 
 	if ( tc->format == TC_29_97_DF ||
@@ -154,13 +164,13 @@ static void framesToHmsf( struct timecode *tc )
 
 		if ( tc->noRollover == 0 )
 		{
-			uint32_t frameNumber24h = (((((round(fps)*60))*10) - (2*9)) * 6 * 24); // 2589408 frames @ 29.97fps
+			uint32_t frameNumber24h = (((((fps*60))*10) - (2*9)) * 6 * 24); // 2589408 frames @ 29.97fps
 
 			frameNumber = frameNumber % frameNumber24h;
 		}
 
 
-		int32_t framesPerMinute    = (round(fps) * 60) - 2;
+		int32_t framesPerMinute    = (fps * 60) - 2;
 		int32_t framesPer10Minutes = (framesPerMinute * 10) + 2;
 
 		int32_t chunksOf10Minutes  = frameNumber / framesPer10Minutes;
@@ -200,17 +210,17 @@ static void framesToHmsf( struct timecode *tc )
 		 *	Rollover if frameNumber > 23:59:59:29
 		 */
 
-		uint32_t frameNumber24h = (((round(fps)*60)*10) * 6 * 24);
+		uint32_t frameNumber24h = (((fps*60)*10) * 6 * 24);
 
 		frameNumber = frameNumber % frameNumber24h;
 
 	}
 
 
-	tc->frames  =   frameNumber % (uint32_t)round(fps);
-	tc->seconds =  (frameNumber / (uint32_t)round(fps)) % 60;
-	tc->minutes = ((frameNumber / (uint32_t)round(fps)) / 60) % 60;
-	tc->hours   = ((frameNumber / (uint32_t)round(fps)) / 60) / 60;
+	tc->frames  =   frameNumber % (uint32_t)fps;
+	tc->seconds =  (frameNumber / (uint32_t)fps) % 60;
+	tc->minutes = ((frameNumber / (uint32_t)fps) / 60) % 60;
+	tc->hours   = ((frameNumber / (uint32_t)fps) / 60) / 60;
 
 }
 

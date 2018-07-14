@@ -146,7 +146,7 @@ struct timecode
 
 
 
-	uint32_t   frameNumber;
+	int32_t    frameNumber;
 
 
 	uint16_t   hours;
@@ -170,7 +170,7 @@ struct timecode
 	 *	Holds the timecode as a null terminated string.
 	 */
 
-	char       string[16];
+	char       string[32];
 
 };
 
