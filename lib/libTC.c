@@ -227,10 +227,6 @@ static void framesToHmsf( struct timecode *tc )
 
 
 
-
-
-
-
 int tc_add( struct timecode *tc_a, struct timecode *tc_b )
 {
 	if ( tc_a->format != tc_b->format )
@@ -246,6 +242,9 @@ int tc_add( struct timecode *tc_a, struct timecode *tc_b )
 
 	return 0;
 }
+
+
+
 
 int tc_sub( struct timecode *tc_a, struct timecode *tc_b )
 {
@@ -266,9 +265,6 @@ int tc_sub( struct timecode *tc_a, struct timecode *tc_b )
 
 
 
-
-
-
 void tc_convert( struct timecode *tc, enum TC_FORMAT format )
 {
 	tc->format  = format;
@@ -276,6 +272,8 @@ void tc_convert( struct timecode *tc, enum TC_FORMAT format )
 	framesToHmsf( tc );
 	hmsfToString( tc );
 }
+
+
 
 
 void tc_convert_frames( struct timecode *tc, enum TC_FORMAT format )
@@ -320,6 +318,7 @@ enum TC_FORMAT tc_fps2format( float fps, uint8_t isDrop )
 
 
 
+
 void tc_set_by_string( struct timecode *tc, const char *str, enum TC_FORMAT format )
 {
 
@@ -361,6 +360,7 @@ void tc_set_by_frames( struct timecode *tc, uint32_t frameNumber, enum TC_FORMAT
 
 
 
+
 void tc_set_by_hmsf( struct timecode *tc, uint16_t hours, uint16_t minutes, uint16_t seconds, uint16_t frames, enum TC_FORMAT format )
 {
 
@@ -382,6 +382,7 @@ void tc_set_by_hmsf( struct timecode *tc, uint16_t hours, uint16_t minutes, uint
 
 
 
+
 void tc_set_by_unitValue( struct timecode *tc, uint64_t unitValue, rational_t *unitRate, enum TC_FORMAT format )
 {
 
@@ -400,194 +401,3 @@ void tc_set_by_unitValue( struct timecode *tc, uint64_t unitValue, rational_t *u
 	hmsfToString( tc );
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// uint32_t tcConvframes( struct timecode *src, struct timecode *dst, rational_t framePerSecond, uint8_t isDropFrame )
-// {
-// 	memcpy( dst, src, sizeof(struct timecode) );
-//
-// 	return intc_tcToFrames( dst, framePerSecond, isDropFrame );
-// }
-//
-//
-// uint32_t tcConvtc( struct timecode *src, struct timecode *dst, rational_t framePerSecond, uint8_t isDropFrame )
-// {
-// 	memcpy( dst, src, sizeof(struct timecode) );
-//
-// 	return setTCbyFrames( dst, src->frameNumber, framePerSecond, isDropFrame );
-// }
-
-
-//
-// void test_samplesValues()
-// {
-// 	struct timecode tc_a;
-// 	rational_t unitRate  = inttorational( 48000, 1 );
-//
-//
-// 	// NOTE calm down GCC
-// 	printf("%s\n", TC_FORMAT_STR[TC_29_97_DF] );
-//
-// 	printf("ProTools\n\n" );
-//
-// 	/* ***************************** Test ProTools Timecodes *****************************  */
-// 	tc_set_by_unitValue( &tc_a, 10796786, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "00:03:44:27" );
-//
-// 	tc_set_by_unitValue( &tc_a, 4147194251, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-// 	tc_set_by_unitValue( &tc_a, 4147099757, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "23:59:58:00" );
-//
-// 	tc_set_by_unitValue( &tc_a, 172799827, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "01:00:00:00" );
-//
-// 	tc_set_by_unitValue( &tc_a, 172801429, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "01:00:00:01" );
-//
-// 	tc_set_by_unitValue( &tc_a, 345599654, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "02:00:00:00" );
-//
-// 	tc_set_by_unitValue( &tc_a, 518399482, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "03:00:00:00" );
-//
-// 	tc_set_by_unitValue( &tc_a, 518445928, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "03:00:00:29" );
-//
-// 	tc_set_by_unitValue( &tc_a, 691197707, unitRate, TC_29_97_DF );
-// 	printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "03:59:59:29" );
-//
-//
-//
-//
-// 	/* ***************************** Test Ardour Timecodes *****************************  */
-//
-// 	printf("\n\nArdour\n\n" );
-//
-// 	/*  Ardour TC        Ardour Sample    Drop/NonDrop   Frames per sec      Output diff  */
-//
-// 	// //	/* 23:59:59:23 */ samples=4151345197; drop=TC_NON_DROP; fps=TC_FPS_23_976;
-// 	// tc_set_by_unitValue( &tc_a, 4151345197, unitRate, TC_23_976 );
-// 	// printf("TC_FPS_23_976    %s should be %s\n", tc_a.string, "23:59:59:23" );
-//     //
-//     //
-// 	// //	/* 23:59:59:23 */ samples=4147198000; drop=TC_NON_DROP; fps=TC_FPS_24;
-// 	// tc_set_by_unitValue( &tc_a, 4147198000, unitRate, TC_24 );
-// 	// printf("TC_FPS_24        %s should be %s\n", tc_a.string, "23:59:59:23" );
-//     //
-//     //
-// 	// //	/* 23:59:59:24 */ samples=4151345278; drop=TC_NON_DROP; fps=TC_FPS_24_975;
-// 	// // tc_set_by_unitValue( &tc_a, 4151345278, unitRate, TC_24 );
-// 	// // printf("%s\n", tc_a.string, "23:59:59:24" );
-//     //
-//     //
-// 	// //	/* 23:59:59:24 */ samples=4147198080; drop=TC_NON_DROP; fps=TC_FPS_25;
-// 	// tc_set_by_unitValue( &tc_a, 4147198080, unitRate, TC_25 );
-// 	// printf("TC_FPS_25        %s should be %s\n", tc_a.string, "23:59:59:24" );
-//
-//
-// 	//	/* 23:59:59:29 */ samples=4151345598; drop=TC_NON_DROP; fps=TC_FPS_29_97;
-// 	tc_set_by_unitValue( &tc_a, 4151345598, unitRate, TC_29_97_NDF );
-// 	printf("TC_FPS_29_97_NDF %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-// 	//	/* 23:59:59:29 */ samples=4147194251; drop=TC_DROP;     fps=TC_FPS_29_97;
-// 	tc_set_by_unitValue( &tc_a, 4147194251, unitRate, TC_29_97_DF );
-// 	printf("TC_FPS_29_97_DF  %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-// 	//	/* 23:59:59:29 */ samples=4147198400; drop=TC_NON_DROP; fps=TC_FPS_30;
-// 	tc_set_by_unitValue( &tc_a, 4147198400, unitRate, TC_30_NDF );
-// 	printf("TC_FPS_30_NDF    %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-// 	// /* 23:59:59:29 */ samples=4143051200; drop=TC_DROP;     fps=TC_FPS_30;
-// 	/*!23:59:59;27 */
-// 	tc_set_by_unitValue( &tc_a, 4143051200, unitRate, TC_30_DF );
-// 	printf("TC_FPS_30_DF     %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-// 	// // /* 23:59:59:59 */ samples=4151346399; drop=TC_NON_DROP; fps=TC_FPS_59_94;
-// 	// tc_set_by_unitValue( &tc_a, 4151346399, unitRate, TC_59_94_NDF );
-// 	// printf("TC_FPS_59_94     %s should be %s\n", tc_a.string, "23:59:59:59" );
-//     //
-//     //
-// 	// // /* 23:59:59:59 */ samples=4147199200; drop=TC_NON_DROP; fps=TC_FPS_60;
-// 	// tc_set_by_unitValue( &tc_a, 4147199200, unitRate, TC_60 );
-// 	// printf("TC_FPS_60        %s should be %s\n", tc_a.string, "23:59:59:59" );
-//
-//
-//
-//
-//
-//
-// 	/*************************************************************************
-// 								  SoundDevices 688
-// 	 *************************************************************************/
-//
-// 	 printf("\n\nSoundDevices\n\n" );
-//
-// 	 // // 48000 24 ND 4147198001
-// 	 // tc_set_by_unitValue( &tc_a, 4147198001, unitRate, TC_24 );
-// 	 // printf("TC_24            %s should be %s\n", tc_a.string, "23:59:59:23" );
-//      //
-//      //
-// 	 // // 48000 23.98 ND 4151345199
-// 	 // tc_set_by_unitValue( &tc_a, 4151345199, unitRate, TC_23_976 );
-// 	 // printf("TC_23_976        %s should be %s\n", tc_a.string, "23:59:59:23" );
-//      //
-//      //
-// 	 // //	48000 25 ND 4147152001
-// 	 // tc_set_by_unitValue( &tc_a, 4147152001, unitRate, TC_25 );
-// 	 // printf("TC_25            %s should be %s\n", tc_a.string, "23:59:59:00" );
-//
-//
-// 	 // //	48000 29.97 ND 4151299153
-// 	 // tc_set_by_unitValue( &tc_a, 4151299153, unitRate, TC_29_97_NDF );
-// 	 // printf("TC_29_97_NDF     %s should be %s\n", tc_a.string, "23:59:59:00" );
-// 	 //	48000 29.97 ND 4151345599
-// 	 tc_set_by_unitValue( &tc_a, 4151345599, unitRate, TC_29_97_NDF );
-// 	 printf("TC_29_97_NDF     %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-// 	 // // 48000 30 ND 4147152001
-// 	 // tc_set_by_unitValue( &tc_a, 4147152001, unitRate, TC_30_NDF );
-// 	 // printf("TC_30_NDF        %s should be %s\n", tc_a.string, "23:59:59:00" );
-// 	 // 48000 30 ND 4147198401
-// 	 tc_set_by_unitValue( &tc_a, 4147198401, unitRate, TC_30_NDF );
-// 	 printf("TC_30_NDF        %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-// 	 // // 48000 29.97 DF 4147151952
-// 	 // tc_set_by_unitValue( &tc_a, 4147151952, unitRate, TC_29_97_DF );
-// 	 // printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "23:59:59:00" );
-// 	 // 48000 29.97 DF 4147198399
-// 	 tc_set_by_unitValue( &tc_a, 4147198399, unitRate, TC_29_97_DF );
-// 	 printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-// 	 // // 48000 30 DF 4143004801
-// 	 // tc_set_by_unitValue( &tc_a, 4143004801, unitRate, TC_30_DF );
-// 	 // printf("TC_30_DF         %s should be %s\n", tc_a.string, "23:59:59:00" );
-// 	 // 48000 30 DF 4143051201
-// 	 tc_set_by_unitValue( &tc_a, 4143051201, unitRate, TC_30_DF );
-// 	 printf("TC_30_DF         %s should be %s\n", tc_a.string, "23:59:59:29" );
-//
-//
-//
-// 	 printf( "\n\n\n" );
-//
-// 	 tc_set_by_unitValue( &tc_a, 4147199999, unitRate, TC_29_97_DF );
-// 	 printf("TC_29_97_DF      %s should be %s\n", tc_a.string, "23:59:59:29" );
-// }
