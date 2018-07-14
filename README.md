@@ -133,11 +133,11 @@ tc_set_by_string( &tc, "01:00:00:00", TC_29_97_DF );
 tc_convert( &tc, TC_29_97_NDF );
 
 //  29.97 FPS - non-drop frame
-//  Timecode     : 01:00:03;18
+//  Timecode     : 01:00:03:18
 //  Frame Number : 108000
 ```
 
-The second method allows for a given timecode to change only the frame number so the timecode's HMSF can is preserved.
+The second method allows for a given timecode to change only the frame number so the timecode's HMSF is preserved.
 
 TODO Test with :29   to   :59    ????
 
@@ -155,14 +155,14 @@ tc_set_by_string( &tc, "01:00:00:00", TC_29_97_DF );
 tc_convert_frames( &tc, TC_29_97_NDF );
 
 //  29.97 FPS - non-drop frame
-//  Timecode     : 01:00:00;00
+//  Timecode     : 01:00:00:00
 //  Frame Number : 107892
 ```
 
 ### Timecode calculation
 
 It is possible to add or subtract to timecodes. For that, both timecode operands must share the same format.
-The result of the operation is stored in the first timecode operand.
+The result of the operation is stored in the first timecode structure.
 
 ```c
 struct timecode tc_a;
