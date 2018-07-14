@@ -208,18 +208,12 @@ static struct timecode * build_timecode_from_value( const char *tc_value, enum T
 
 int main( int argc, char *argv[] )
 {
+
     char  *c_tc_format  = NULL;
     char  *c_edit_rate  = NULL;
     char  *c_convert_to = NULL;
     char  *c_add_value  = NULL;
     char  *c_sub_value  = NULL;
-
-    // enum TC_FORMAT   tc_format  = 0;
-    // rational_t       edit_rate  = {0, 0};
-    // enum TC_FORMAT   convert_to = 0;
-    // struct timecode *add_value  = NULL;
-    // struct timecode *sub_value  = NULL;
-    // struct timecode *tc_value   = NULL;
 
     int outputHMSF   = 0;
     int outputFrames = 0;
@@ -242,7 +236,7 @@ int main( int argc, char *argv[] )
 		{ "frames",      no_argument,        0,   'f'  },
 		{ "rollover",    no_argument,        0,   'r'  },
 
-		{ 0,             0,                  0,     0  }
+		{ 0,             0,                  0,    0   }
 	};
 
 
@@ -277,35 +271,40 @@ int main( int argc, char *argv[] )
 		}
 	}
 
+
+
+	if ( optind == argc )
+	{
+		fprintf( stderr, "Missing timecode value.\n" );
+		return 1;
+	}
+
+	char *c_tc_value = argv[argc-1];
+
+
+
     if ( c_tc_format == NULL )
     {
         fprintf( stderr, "Missing timecode --format.\n" );
         return 1;
     }
 
-    if ( optind == argc )
-    {
-        fprintf( stderr, "Missing timecode value.\n" );
-        return 1;
-    }
-
-
-
     enum TC_FORMAT tc_format = string_to_format( c_tc_format );
 
     if ( tc_format == TC_FORMAT_UNK )
     {
-        fprintf( stderr, "Unsupported timecode format \"%s\"\nSee tcCoca -l for a list of the supported formats.\n", c_tc_format );
+        fprintf( stderr, "Unsupported timecode format \"%s\"\nSee tcCoca -l for a list of supported formats.\n", c_tc_format );
         return 1;
     }
 
 
-    char *c_tc_value = argv[argc-1];
 
+	struct timecode *tc = NULL;
     struct timecode *sub_value = NULL;
     struct timecode *add_value = NULL;
 
-    struct timecode *tc = build_timecode_from_value( c_tc_value, tc_format, c_edit_rate );
+
+	tc = build_timecode_from_value( c_tc_value, tc_format, c_edit_rate );
 
     if ( tc == NULL )
     {
@@ -315,8 +314,6 @@ int main( int argc, char *argv[] )
     tc->noRollover = noRollover;
 
 
-
-    /* Process */
 
     if ( c_convert_to != NULL )
     {
@@ -358,8 +355,6 @@ int main( int argc, char *argv[] )
 
 
 
-    /* Print */
-
     if ( outputHMSF == 1 )
     {
         printf( "%s\n", tc->string );
@@ -370,6 +365,7 @@ int main( int argc, char *argv[] )
     }
     else
     {
+		printf( "format   : %s\n", TC_FORMAT_STR[tc->format] );
         printf( "timecode : %s\n", tc->string );
         printf( "frames   : %u\n", tc->frameNumber );
     }
@@ -390,6 +386,7 @@ int main( int argc, char *argv[] )
     {
         free( sub_value );
     }
+
 
 	return 0;
 }
