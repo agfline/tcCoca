@@ -280,7 +280,13 @@ void tc_convert_frames( struct timecode *tc, enum TC_FORMAT format )
 {
 	tc->format  = format;
 
+	if ( tc->frames > round(rationalToFloat(TC_FPS[format])) )
+	{
+		tc->frames = round(rationalToFloat(TC_FPS[format])) - 1;
+	}
+
 	hmsfToFrames( tc );
+	framesToHmsf( tc );
 	hmsfToString( tc );
 }
 

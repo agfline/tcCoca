@@ -42,27 +42,27 @@ void show_help()
     Usage :\n\
         tcCoca -F <format> <tc_value> [options]\n\
     \n\
-        tc value can be either hh:mm:ss:ff timecode, frame number or any\n\
-        value associated with an edit rate.\n\
-    \n\n\
+        tc value can be either hh:mm:ss:ff timecode, frame number or any value\n\
+        associated with an edit rate.\n\
+    \n\
     Options :\n\
-            --help                  show this help\n\
-        -l, --list                  list all supported TC formats\n\
+            --help                        show this help\n\
+        -l, --list                        list all supported TC formats\n\
 		\n\
-        -F, --format      <format>  set the TC value format to <format>\n\
-        -R, --rate        <rate>    specify the edit rate of the input TC\n\
-                                    value - default is frame rate\n\
+        -F, --format            <format>  set the TC value format to <format>\n\
+        -R, --rate              <rate>    specify the edit rate of the input TC\n\
+                                          value - default is frame rate\n\
 		\n\
-        -c, --convert-to  <format>  convert TC value to the given <format>\n\
-        -a, --add         <value>   add <value> to input TC value\n\
-        -s, --sub         <value>   subtract <value> from input TC value\n\
-    \n\n\
+        -c, --convert-to        <format>  convert TC value to the given <format>\n\
+            --convert-frames-to <format>  convert TC frame number to the given <format>\n\
+        -a, --add               <value>   add <value> to input TC value\n\
+        -s, --sub               <value>   subtract <value> from input TC value\n\
+    \n\
     Output :\n\
-        -h, --hmsf                  output TC as a time value hh:mm:ss:ff only\n\
-        -f, --frames                output TC as a frame number only\n\
-        -n, --no-rollover           don't rollover if TC is bigger than day limit\n\
-    \n\
-    \n\
+        -h, --hmsf                        output TC as a time value hh:mm:ss:ff only\n\
+        -f, --frames                      output TC as a frame number only\n\
+        -n, --no-rollover                 don't rollover if TC is bigger than day limit\n\
+    \n\n\
     Examples :\n\
         tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:7 \n\
         tcCoca -F 29.97DF 4147194251 -R 48000/1\n\
@@ -209,11 +209,12 @@ static struct timecode * build_timecode_from_value( const char *tc_value, enum T
 int main( int argc, char *argv[] )
 {
 
-    char  *c_tc_format  = NULL;
-    char  *c_edit_rate  = NULL;
-    char  *c_convert_to = NULL;
-    char  *c_add_value  = NULL;
-    char  *c_sub_value  = NULL;
+    char  *c_tc_format         = NULL;
+    char  *c_edit_rate         = NULL;
+    char  *c_convert_to        = NULL;
+	char  *c_convert_frames_to = NULL;
+    char  *c_add_value         = NULL;
+    char  *c_sub_value         = NULL;
 
     int outputHMSF   = 0;
     int outputFrames = 0;
@@ -223,20 +224,21 @@ int main( int argc, char *argv[] )
 
 	static struct option long_options[] = {
 
-		{ "help",	     no_argument,		 0,	 0x80  },
+		{ "help",	            no_argument,		0,	0x80  },
 
-		{ "list",        no_argument,        0,   'l'  },
-		{ "format",      required_argument,  0,   'F'  },
-		{ "rate",        required_argument,  0,   'R'  },
-		{ "convert-to",  required_argument,  0,   'c'  },
-		{ "add",         required_argument,  0,   'a'  },
-		{ "sub",         required_argument,  0,   's'  },
+		{ "list",               no_argument,        0,   'l'  },
+		{ "format",             required_argument,  0,   'F'  },
+		{ "rate",               required_argument,  0,   'R'  },
+		{ "convert-to",         required_argument,  0,   'c'  },
+		{ "convert-frames-to",  required_argument,  0,  0x81  },
+		{ "add",                required_argument,  0,   'a'  },
+		{ "sub",                required_argument,  0,   's'  },
 
-		{ "hmsf",        no_argument,        0,   'h'  },
-		{ "frames",      no_argument,        0,   'f'  },
-		{ "rollover",    no_argument,        0,   'r'  },
+		{ "hmsf",               no_argument,        0,   'h'  },
+		{ "frames",             no_argument,        0,   'f'  },
+		{ "rollover",           no_argument,        0,   'r'  },
 
-		{ 0,             0,                  0,    0   }
+		{ 0,                    0,                  0,    0   }
 	};
 
 
@@ -253,21 +255,22 @@ int main( int argc, char *argv[] )
 
 		switch ( c )
 		{
-			case 'l':   show_formats();                   return 0;
-			case 'F':   c_tc_format      = optarg;           break;
-			case 'R':   c_edit_rate      = optarg;           break;
+			case  'l':   show_formats();                      return 0;
+			case  'F':   c_tc_format         = optarg;           break;
+			case  'R':   c_edit_rate         = optarg;           break;
 
-			case 'c':   c_convert_to     = optarg;           break;
-			case 'a':   c_add_value      = optarg;           break;
-			case 's':   c_sub_value      = optarg;           break;
+			case  'c':   c_convert_to        = optarg;           break;
+			case 0x81:   c_convert_frames_to = optarg;           break;
+			case  'a':   c_add_value         = optarg;           break;
+			case  's':   c_sub_value         = optarg;           break;
 
-			case 'h':   outputHMSF       = 1;                break;
-			case 'f':   outputFrames     = 1;                break;
-			case 'n':   noRollover       = 1;                break;
+			case  'h':   outputHMSF          = 1;                break;
+			case  'f':   outputFrames        = 1;                break;
+			case  'n':   noRollover          = 1;                break;
 
-			case 0x80:	show_help();                      return 0;
+			case 0x80:	show_help();                          return 0;
 
-			default:                                         break;
+			default:                                             break;
 		}
 	}
 
@@ -325,6 +328,17 @@ int main( int argc, char *argv[] )
         }
 
         tc_convert( tc, convert_to );
+    }
+	else if ( c_convert_frames_to != NULL )
+    {
+        enum TC_FORMAT convert_frames_to = string_to_format( c_convert_frames_to );
+
+        if ( convert_frames_to == TC_FORMAT_UNK )
+        {
+            return 1;
+        }
+
+        tc_convert_frames( tc, convert_frames_to );
     }
     else if ( c_add_value != NULL )
     {
