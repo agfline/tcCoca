@@ -205,7 +205,7 @@ static void framesToHmsf( struct timecode *tc )
 	}
 	else if ( tc->noRollover == 0 )
 	{
-
+		
 		/*
 		 *	Rollover if frameNumber > 23:59:59:29
 		 */
@@ -330,7 +330,7 @@ void tc_set_by_string( struct timecode *tc, const char *str, enum TC_FORMAT form
 
 	tc->format = format;
 
-	tc->noRollover = 0;
+	// tc->noRollover = 0;
 
 	strncpy( tc->string, str, 12 );
 
@@ -355,7 +355,7 @@ void tc_set_by_frames( struct timecode *tc, uint32_t frameNumber, enum TC_FORMAT
 	tc->frameNumber = frameNumber;
 	tc->format = format;
 
-	tc->noRollover = 0;
+	// tc->noRollover = 0;
 
 
 	framesToHmsf( tc );
@@ -377,7 +377,7 @@ void tc_set_by_hmsf( struct timecode *tc, uint16_t hours, uint16_t minutes, uint
 
 	tc->format  = format;
 
-	tc->noRollover = 0;
+	// tc->noRollover = 0;
 
 
 	hmsfToFrames( tc );
@@ -397,7 +397,7 @@ void tc_set_by_unitValue( struct timecode *tc, uint64_t unitValue, rational_t *u
 
 	tc->format = format;
 
-	tc->noRollover = 0;
+	// tc->noRollover = 0;
 
 
 	unitValueToFrames( tc );

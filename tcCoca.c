@@ -164,7 +164,7 @@ static enum TC_FORMAT string_to_format( const char *str )
 
 
 
-static struct timecode * build_timecode_from_value( const char *tc_value, enum TC_FORMAT tc_format, const char *edit_rate )
+static struct timecode * build_timecode_from_value( const char *tc_value, enum TC_FORMAT tc_format, const char *edit_rate, int noRollover )
 {
 
     if ( strlen(tc_value) == 11 &&
@@ -180,7 +180,9 @@ static struct timecode * build_timecode_from_value( const char *tc_value, enum T
     {
         struct timecode *tc = calloc( 1, sizeof(struct timecode) );
 
-        tc_set_by_string( tc, tc_value, tc_format );
+		tc->noRollover = noRollover;
+
+		tc_set_by_string( tc, tc_value, tc_format );
 
         return tc;
     }
@@ -196,6 +198,8 @@ static struct timecode * build_timecode_from_value( const char *tc_value, enum T
 
         struct timecode *tc = calloc( 1, sizeof(struct timecode) );
 
+		tc->noRollover = noRollover;
+
         tc_set_by_unitValue( tc, unitValue, &rate, tc_format );
 
         return tc;
@@ -203,6 +207,8 @@ static struct timecode * build_timecode_from_value( const char *tc_value, enum T
     else if ( isNumber( tc_value ) )
     {
         struct timecode *tc = calloc( 1, sizeof(struct timecode) );
+
+		tc->noRollover = noRollover;
 
         uint64_t frames = strtol( tc_value, NULL, 10 );
 
@@ -326,14 +332,15 @@ int main( int argc, char *argv[] )
     struct timecode *add_value = NULL;
 
 
-	tc = build_timecode_from_value( c_tc_value, tc_format, c_edit_rate );
+	tc = build_timecode_from_value( c_tc_value, tc_format, c_edit_rate, noRollover );
 
     if ( tc == NULL )
     {
         return 1;
     }
 
-    tc->noRollover = noRollover;
+    // tc->noRollover = noRollover;
+	// printf("noRollover %i\n", noRollover);
 
 
 
@@ -361,27 +368,23 @@ int main( int argc, char *argv[] )
     }
     else if ( c_add_value != NULL )
     {
-        add_value = build_timecode_from_value( c_add_value, tc_format, NULL );
+        add_value = build_timecode_from_value( c_add_value, tc_format, NULL, noRollover );
 
         if ( add_value == NULL )
         {
             return 1;
         }
 
-        add_value->noRollover = noRollover;
-
         tc_add( tc, add_value );
     }
     else if ( c_sub_value != NULL )
     {
-        sub_value = build_timecode_from_value( c_sub_value, tc_format, NULL );
+        sub_value = build_timecode_from_value( c_sub_value, tc_format, NULL, noRollover );
 
         if ( sub_value == NULL )
         {
             return 1;
         }
-
-        sub_value->noRollover = noRollover;
 
         tc_sub( tc, sub_value );
     }
