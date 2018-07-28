@@ -74,6 +74,16 @@ void show_help()
 
 
 
+void show_usage()
+{
+	printf( "\n\
+Usage : tcCoca -F <format> <tc_value> [options]\n\
+-h or --help for more details.\n" );
+}
+
+
+
+
 void show_formats()
 {
 	printf( "\n Supported timecode format options :\n\n" );
@@ -279,6 +289,7 @@ int main( int argc, char *argv[] )
 	if ( optind == argc )
 	{
 		fprintf( stderr, "Missing timecode value.\n" );
+		show_usage();
 		return 1;
 	}
 
@@ -289,6 +300,7 @@ int main( int argc, char *argv[] )
     if ( c_tc_format == NULL )
     {
         fprintf( stderr, "Missing timecode --format.\n" );
+		show_usage();
         return 1;
     }
 
@@ -297,6 +309,7 @@ int main( int argc, char *argv[] )
     if ( tc_format == TC_FORMAT_UNK )
     {
         fprintf( stderr, "Unsupported timecode format \"%s\"\nSee tcCoca -l for a list of supported formats.\n", c_tc_format );
+		show_usage();
         return 1;
     }
 
