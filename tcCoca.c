@@ -88,7 +88,9 @@ void show_formats()
 {
 	printf( "\n Supported timecode format options :\n\n" );
 
-    for ( size_t i = 1; TC_FORMAT_STR[i][0] != '\0'; i++ )
+	unsigned int i = 1;
+
+    for ( ; TC_FORMAT_STR[i][0] != '\0'; i++ )
     {
         printf( "   %s\n", TC_FORMAT_STR[i] );
     }
@@ -103,7 +105,9 @@ static int isNumber( const char *str )
 {
     size_t str_sz = strlen(str);
 
-    for ( size_t i = 0; i < str_sz; i++ )
+	unsigned int i = 0;
+
+    for ( ; i < str_sz; i++ )
     {
         if ( isdigit( str[i] ) == 0 )
         {
@@ -144,7 +148,9 @@ static rational_t string_to_rational( const char *str )
 
 static enum TC_FORMAT string_to_format( const char *str )
 {
-    for ( size_t i = 1; TC_FORMAT_STR[i][0] != '\0'; i++ )
+	unsigned int i = 1;
+
+    for ( ; TC_FORMAT_STR[i][0] != '\0'; i++ )
     {
         if ( strcmp( str, TC_FORMAT_STR[i] ) == 0 )
         {
