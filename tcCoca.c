@@ -1,4 +1,23 @@
+/*
+ *	This file is part of LibTC.
+ *
+ *	Copyright (c) 2017 Adrien Gesta-Fline
+ *
+ *	LibTC is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	any later version.
+ *
+ *	LibTC is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with LibTC. If not, see <http://www.gnu.org/licenses/>.
+ */
 
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,7 +83,7 @@ void show_help()
         -n, --no-rollover                 don't rollover if TC is bigger than day limit\n\
     \n\n\
     Examples :\n\
-        tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:07 \n\
+        tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:07\n\
         tcCoca -F 29.97DF 4147194251 -R 48000/1\n\
         tcCoca -F 29.97DF 2589407\n\
         tcCoca -F 29.97DF 01:00:00:00 -c 60\n\

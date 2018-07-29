@@ -1,4 +1,23 @@
 
+/*
+ *	This file is part of LibTC.
+ *
+ *	Copyright (c) 2017 Adrien Gesta-Fline
+ *
+ *	LibTC is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	any later version.
+ *
+ *	LibTC is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with LibTC. If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h> // abs()
@@ -205,7 +224,7 @@ static void framesToHmsf( struct timecode *tc )
 	}
 	else if ( tc->noRollover == 0 )
 	{
-		
+
 		/*
 		 *	Rollover if frameNumber > 23:59:59:29
 		 */

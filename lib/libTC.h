@@ -2,22 +2,22 @@
 #define __libTC_h__
 
 /*
- *	This file is part of LibAAF.
+ *	This file is part of LibTC.
  *
  *	Copyright (c) 2017 Adrien Gesta-Fline
  *
- *	LibAAF is free software: you can redistribute it and/or modify
+ *	LibTC is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	any later version.
  *
- *	LibAAF is distributed in the hope that it will be useful,
+ *	LibTC is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU Affero General Public License for more details.
  *
  *	You should have received a copy of the GNU Affero General Public License
- *	along with LibAAF. If not, see <http://www.gnu.org/licenses/>.
+ *	along with LibTC. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdio.h>
@@ -86,24 +86,6 @@ typedef struct rational_t
 
 } __attribute__((packed)) rational_t;
 
-// static rational_t TC_FPS[] = {
-// 	0x0000000000000001,  // UNKNWON       0/1
-// 	0x00005dc0000003e9,  // TC_23_976     24000/1001
-// 	0x0000001800000001,  // TC_24         24/1
-// 	0x0000001900000001,  // TC_25         25/1
-// 	0x00007530000003e9,  // TC_29_97_NDF  30000/1001
-// 	0x00007530000003e9,  // TC_29_97_DF   30000/1001
-// 	0x0000001e00000001,  // TC_30         30/1
-// 	0x0000001e00000001,  // TC_30_DF      30/1
-// 	0x0000003200000001,  // TC_50         50/1
-// 	0x0000ea60000003e9,  // TC_59_94_NDF  60000/1001
-// 	0x0000ea60000003e9,  // TC_59_94_DF   60000/1001
-// 	0x0000003c00000001,  // TC_60         60/1
-// 	0x0000003c00000001,  // TC_60_DF      60/1
-// 	0x0000006000000001,  // TC_96         96/1
-// 	0x0000006400000001,  // TC_100        100/1
-// 	0x0000007800000001   // TC_120        120/1
-// };
 
 // static rational_t TC_FPS[] = {
 // 	{0x00000000, 0x00000001},  // UNKNWON       0/1
@@ -127,11 +109,7 @@ typedef struct rational_t
 
 #define inttorational( n, d ) \
 	{n, d}
-	// ( ((uint64_t)n << 32) | (d & 0xffffffff) )
-/*
-#define rationaltofloat( n ) \
-	(float)(( (n & 0xffffffff) == 0 ) ? 0 : ( (float)(n >> 32) / (n & 0xffffffff) ) )
-*/
+
 
 #ifndef rationalToFloat
 #define rationalToFloat( r ) \
@@ -162,9 +140,6 @@ struct timecode
 
 	uint8_t    noRollover;  // disable rollover if TC is bigger than day limit
 
-	// rational_t framePerSecond;
-    //
-	// uint8_t    isDropFrame;
 
 	/**
 	 *	Holds the timecode as a null terminated string.
@@ -196,8 +171,6 @@ void tc_set_by_hmsf( struct timecode *tc, uint16_t hours, uint16_t minutes, uint
 
 void tc_set_by_unitValue( struct timecode *tc, uint64_t unitValue, rational_t *unitRate, enum TC_FORMAT format );
 
-
-int oldTCbyFrames( struct timecode *tc, uint32_t frameNumber, rational_t framePerSecond, uint8_t isDropFrame );
 
 
 /*
