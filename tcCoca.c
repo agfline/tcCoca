@@ -64,7 +64,7 @@ void show_help()
         -n, --no-rollover                 don't rollover if TC is bigger than day limit\n\
     \n\n\
     Examples :\n\
-        tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:7 \n\
+        tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:07 \n\
         tcCoca -F 29.97DF 4147194251 -R 48000/1\n\
         tcCoca -F 29.97DF 2589407\n\
         tcCoca -F 29.97DF 01:00:00:00 -c 60\n\
@@ -166,7 +166,6 @@ static enum TC_FORMAT string_to_format( const char *str )
 
 static struct timecode * build_timecode_from_value( const char *tc_value, enum TC_FORMAT tc_format, const char *edit_rate, int noRollover )
 {
-
     if ( strlen(tc_value) == 11 &&
          isdigit(tc_value[0])   &&
          isdigit(tc_value[1])   &&
@@ -338,9 +337,6 @@ int main( int argc, char *argv[] )
     {
         return 1;
     }
-
-    // tc->noRollover = noRollover;
-	// printf("noRollover %i\n", noRollover);
 
 
 
