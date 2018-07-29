@@ -5,7 +5,7 @@ LibTC is a C-coded library for SMPTE / EBU timecode handling, display, conversio
 
 It is based upon the **SMPTE ST 12-1** standard (formally SMPTE 12M) and the **SMPTE ST 12-3** for HFR. Those define the following rates : 23.98, 24, 25, 29.97, 30, 47.95, 48, 50, 59.94, 60, 72, 96, 100 and 120 frames per second with the support for drop-frame compensation with 29.97 and 59.94 rates.
 
-* **Note about 30fps and 60fps drop-frame** : Even if those are listed as options in many software / hardware, those are useless since timecode is already in sync with video and real-time clock. Thus, there is no derivation to compensate. Other times the terms are misused as names for 29.87 and 59.94 drop-frame. In any case, 30DF and 60DF are not implemented as part of the library.
+* **Note about 30fps and 60fps drop-frame** : Even if those are listed as options in many software / hardware, those are useless since timecode is already in sync with video and real-time clock. Thus, there is no deviation to compensate. Other times the terms are misused as names for 29.87 and 59.94 drop-frame. In any case, 30DF and 60DF are not implemented as part of the library.
 * **Note about 23.98fps and 47.95fps** : There is no standard way to compensate the deviation of those formats, so there is none implemented in this library. Those are then not in sync with real-time clock, accumulating a deviation of approximately 86 frames (3.6
 seconds) in one hour of elapsed time.
 
@@ -45,7 +45,7 @@ Output :
 
 
 Examples :
-    tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:7
+    tcCoca -F 29.97DF 01:02:03:04 -a 02:10:01:07
     tcCoca -F 29.97DF 4147194251 -R 48000/1
     tcCoca -F 29.97DF 2589407
     tcCoca -F 29.97DF 01:00:00:00 -c 60
@@ -89,7 +89,7 @@ enum TC_FORMAT format = tc_fps2format( fps, isDrop );
 
 if ( format == TC_FORMAT_UNK )
 {
-    printf( "Unsupported or unknwon timecode format.\n" );
+    printf( "Unsupported timecode format.\n" );
 }
 else
 {
