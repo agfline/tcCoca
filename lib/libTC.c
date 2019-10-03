@@ -17,7 +17,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with LibTC. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h> // abs()
@@ -95,11 +95,11 @@ static void hmsfToString( struct timecode *tc )
 {
 	char string[16];
 
-	snprintf( string,  16, "%02i%c%02u%c%02u%c%02u",
-	          tc->hours,   TC_SEP,
-	          tc->minutes, TC_SEP,
-	          tc->seconds, (tc->format == TC_29_97_DF || tc->format == TC_59_94_DF) ? TC_SEP_DROP : TC_SEP,
-	          tc->frames   );
+  snprintf( string, 16, "%02u%c%02u%c%02u%c%02u",
+	          (tc->hours   <= 9999) ? tc->hours   : 0, TC_SEP,
+	          (tc->minutes <=   99) ? tc->minutes : 0, TC_SEP,
+	          (tc->seconds <=   99) ? tc->seconds : 0, (tc->format == TC_29_97_DF || tc->format == TC_59_94_DF) ? TC_SEP_DROP : TC_SEP,
+	          (tc->frames  <=  999) ? tc->frames  : 0 );
 
 	if ( tc->frameNumber < 0 )
 	{
